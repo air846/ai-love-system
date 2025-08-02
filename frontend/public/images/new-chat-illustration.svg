@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 300" width="500" height="300">
+  <!-- 背景 -->
+  <rect width="500" height="300" fill="#fff9f9" rx="20" ry="20"/>
+  
+  <!-- 装饰元素 -->
+  <circle cx="40" cy="40" r="20" fill="#ffb7b2" opacity="0.3"/>
+  <circle cx="460" cy="260" r="25" fill="#a8e6cf" opacity="0.3"/>
+  <circle cx="420" cy="50" r="15" fill="#ffdac1" opacity="0.3"/>
+  <circle cx="80" cy="240" r="20" fill="#e2d1f9" opacity="0.3"/>
+  
+  <!-- 两个人物轮廓 -->
+  <ellipse cx="180" cy="180" rx="40" ry="50" fill="#ffb7b2" opacity="0.8"/>
+  <circle cx="180" cy="120" r="30" fill="#ffb7b2" opacity="0.8"/>
+  
+  <ellipse cx="320" cy="180" rx="40" ry="50" fill="#a8e6cf" opacity="0.8"/>
+  <circle cx="320" cy="120" r="30" fill="#a8e6cf" opacity="0.8"/>
+  
+  <!-- 对话气泡 -->
+  <rect x="120" y="70" width="80" height="40" rx="15" ry="15" fill="white" stroke="#ffb7b2" stroke-width="2"/>
+  <polygon points="150,110 160,90 170,110" fill="white" stroke="#ffb7b2" stroke-width="2"/>
+  
+  <rect x="300" y="70" width="80" height="40" rx="15" ry="15" fill="white" stroke="#a8e6cf" stroke-width="2"/>
+  <polygon points="330,110 340,90 350,110" fill="white" stroke="#a8e6cf" stroke-width="2"/>
+  
+  <!-- 中间的爱心 -->
+  <path d="M250,150 C250,130 235,120 220,120 C200,120 190,140 190,150 C190,180 250,210 250,210 C250,210 310,180 310,150 C310,140 300,120 280,120 C265,120 250,130 250,150 Z" fill="#ffdac1" opacity="0.7"/>
+  
+  <!-- 小星星装饰 -->
+  <path d="M100,80 L103,73 L106,80 L113,83 L106,86 L103,93 L100,86 L93,83 Z" fill="#e2d1f9"/>
+  <path d="M400,80 L403,73 L406,80 L413,83 L406,86 L403,93 L400,86 L393,83 Z" fill="#ffdac1"/>
+  <path d="M250,40 L253,33 L256,40 L263,43 L256,46 L253,53 L250,46 L243,43 Z" fill="#a8e6cf"/>
+  
+  <!-- 底部文字区域 -->
+  <rect x="150" y="230" width="200" height="40" rx="10" ry="10" fill="white" stroke="#ffdac1" stroke-width="2"/>
+  
+  <!-- 装饰线条 -->
+  <line x1="50" y1="200" x2="100" y2="200" stroke="#e2d1f9" stroke-width="3" stroke-linecap="round"/>
+  <line x1="400" y1="200" x2="450" y2="200" stroke="#e2d1f9" stroke-width="3" stroke-linecap="round"/>
+  <line x1="50" y1="220" x2="120" y2="220" stroke="#a8e6cf" stroke-width="3" stroke-linecap="round"/>
+  <line x1="380" y1="220" x2="450" y2="220" stroke="#a8e6cf" stroke-width="3" stroke-linecap="round"/>
+</svg>

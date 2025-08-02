@@ -1,0 +1,399 @@
+/* 治愈系AI恋爱系统主题样式 */
+:root {
+  /* 马卡龙柔和配色 */
+  --color-mint: #a8e6cf;
+  --color-peach: #ffb7b2;
+  --color-cream: #ffdac1;
+  --color-lavender: #e2d1f9;
+  --color-sky: #b5ead7;
+  
+  /* 基础颜色 - 强化对比度 */
+  --primary-color: var(--color-peach);
+  --secondary-color: var(--color-mint);
+  --background-color: #fff9f9;
+  --text-color: #2c2c2c; /* 深灰色，增强对比 */
+  --text-color-light: #666666;
+  --text-color-dark: #1a1a1a;
+  --text-color-secondary: #888888;
+  --border-color: #f0e6e6;
+  
+  /* 字体 - 圆润易读字体 */
+  --font-family: 'PingFang SC', 'Source Han Sans CN', 'Noto Sans CJK SC', 'Microsoft YaHei', sans-serif;
+  
+  /* 字体大小层次 */
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+  --font-size-2xl: 24px;
+  
+  /* 字重层次 */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  /* 阴影 */
+  --shadow-sm: 0 2px 8px rgba(255, 183, 178, 0.15);
+  --shadow-md: 0 4px 12px rgba(255, 183, 178, 0.2);
+  --shadow-lg: 0 8px 24px rgba(255, 183, 178, 0.25);
+  
+  /* 圆角 */
+  --border-radius-sm: 8px;
+  --border-radius-md: 12px;
+  --border-radius-lg: 20px;
+  
+  /* 动画 */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+}
+
+/* 暗色模式 */
+.dark-theme {
+  --background-color: #2a2a2a;
+  --text-color: #f0f0f0;
+  --border-color: #3a3a3a;
+  --primary-color: #ff9d96;
+  --secondary-color: #8cd9c0;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+/* 全局样式 - 增强可读性 */
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base); /* 增大基础字体 */
+  line-height: 1.75; /* 增加行高 */
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* 文字阴影增强可读性 */
+}
+
+/* 按钮样式 - 增强可读性 */
+.love-btn {
+  background-color: var(--primary-color);
+  border: none;
+  border-radius: var(--border-radius-md);
+  color: white;
+  padding: 12px 24px; /* 增大内边距 */
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold); /* 进一步增强字重 */
+  line-height: 1.5;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+  /* 增强白色文字阴影，提高可读性 */
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.5);
+  /* 添加文字描边效果 */
+  -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.2);
+}
+
+.love-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  background-color: #ff9d96;
+}
+
+.love-btn:active {
+  transform: translateY(0);
+}
+
+/* 按钮点击波纹效果 */
+.love-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.5);
+  opacity: 0;
+  border-radius: 100%;
+  transform: scale(1, 1) translate(-50%, -50%);
+  transform-origin: 50% 50%;
+}
+
+.love-btn:focus:not(:active)::after {
+  animation: ripple 1s ease-out;
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0, 0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(20, 20);
+    opacity: 0;
+  }
+}
+
+/* 卡片样式 */
+.love-card {
+  background-color: white;
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: 20px;
+  transition: all var(--transition-normal);
+  border: 1px solid var(--border-color);
+  position: relative;
+}
+
+.love-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+/* 纸张纹理效果 */
+.paper-texture {
+  background-image: url('/images/paper-texture.png');
+  background-blend-mode: overlay;
+  background-size: 200px;
+}
+
+/* 输入框样式 - 增强可读性 */
+.love-input {
+  border: 2px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  padding: 12px 18px; /* 增大内边距 */
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.5;
+  color: var(--text-color-dark); /* 使用更深的文字颜色 */
+  transition: all var(--transition-fast);
+  background-color: rgba(255, 255, 255, 0.8);
+  width: 100%;
+}
+
+.love-input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(255, 183, 178, 0.25); /* 增强焦点阴影 */
+  outline: none;
+  color: var(--text-color-dark);
+}
+
+/* 消息气泡样式 - 增强可读性 */
+.message-bubble {
+  padding: 14px 18px; /* 增大内边距 */
+  border-radius: var(--border-radius-md);
+  max-width: 80%;
+  margin-bottom: 12px;
+  position: relative;
+  font-size: var(--font-size-base);
+  line-height: 1.6; /* 增加行高 */
+  font-weight: var(--font-weight-normal);
+}
+
+.message-bubble.user {
+  background-color: var(--primary-color);
+  color: white;
+  margin-left: auto;
+  border-bottom-right-radius: 4px;
+  /* 增强用户消息白色文字阴影，提高可读性 */
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.5);
+  font-weight: var(--font-weight-semibold); /* 进一步增强字重 */
+  /* 添加文字描边效果 */
+  -webkit-text-stroke: 0.3px rgba(0, 0, 0, 0.15);
+}
+
+.message-bubble.ai {
+  background-color: white;
+  color: var(--text-color-dark); /* 使用更深的文字颜色 */
+  margin-right: auto;
+  border-bottom-left-radius: 4px;
+  box-shadow: var(--shadow-sm);
+  font-weight: var(--font-weight-normal);
+}
+
+/* 消息气泡尾巴 */
+.message-bubble.user::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: -8px;
+  width: 16px;
+  height: 16px;
+  background-color: var(--primary-color);
+  clip-path: polygon(0 0, 0% 100%, 100% 100%);
+}
+
+.message-bubble.ai::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: -8px;
+  width: 16px;
+  height: 16px;
+  background-color: white;
+  clip-path: polygon(100% 0, 0% 100%, 100% 100%);
+}
+
+/* 情感分析可视化 */
+.emotion-plant {
+  width: 100px;
+  height: 200px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.emotion-stem {
+  width: 6px;
+  height: 100%;
+  background: linear-gradient(to top, #7cbb78, #a8e6cf);
+  margin: 0 auto;
+  position: relative;
+  border-radius: 3px;
+  transition: height 1s ease;
+}
+
+.emotion-flower {
+  width: 60px;
+  height: 60px;
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: all 1s ease;
+}
+
+.flower-blooming {
+  background: radial-gradient(circle, #ffb7b2 0%, #ff9d96 70%);
+  border-radius: 50%;
+  box-shadow: 
+    0 0 0 15px rgba(255, 183, 178, 0.3),
+    0 0 0 30px rgba(255, 183, 178, 0.1);
+  animation: pulse 3s infinite alternate;
+}
+
+.flower-growing {
+  background: radial-gradient(circle, #ffdac1 0%, #ffb7b2 70%);
+  border-radius: 50%;
+  box-shadow: 0 0 0 10px rgba(255, 218, 193, 0.3);
+}
+
+.flower-wilting {
+  background: radial-gradient(circle, #e2d1f9 0%, #c9b6e4 70%);
+  border-radius: 50%;
+  transform: translateX(-50%) scale(0.8);
+  opacity: 0.8;
+}
+
+@keyframes pulse {
+  0% {
+    transform: translateX(-50%) scale(1);
+    box-shadow: 
+      0 0 0 15px rgba(255, 183, 178, 0.3),
+      0 0 0 30px rgba(255, 183, 178, 0.1);
+  }
+  100% {
+    transform: translateX(-50%) scale(1.1);
+    box-shadow: 
+      0 0 0 20px rgba(255, 183, 178, 0.3),
+      0 0 0 40px rgba(255, 183, 178, 0.1);
+  }
+}
+
+/* 情感统计条 */
+.emotion-stat {
+  margin-bottom: 15px;
+}
+
+.stat-bar {
+  height: 8px;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 5px 0;
+}
+
+.stat-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 1s ease;
+}
+
+.stat-fill.positive {
+  background: linear-gradient(to right, #a8e6cf, #7cbb78);
+}
+
+.stat-fill.negative {
+  background: linear-gradient(to right, #ffb7b2, #ff8a82);
+}
+
+.stat-fill.neutral {
+  background: linear-gradient(to right, #e2d1f9, #c9b6e4);
+}
+
+/* 打字指示器 */
+.typing-indicator {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.typing-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--primary-color);
+  border-radius: 50%;
+  margin-right: 5px;
+  animation: typing-bounce 1.4s infinite ease-in-out;
+}
+
+.typing-dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.typing-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-dot:nth-child(3) {
+  animation-delay: 0.4s;
+  margin-right: 0;
+}
+
+@keyframes typing-bounce {
+  0%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-8px);
+  }
+}
+
+/* 页面转场动画 */
+.page-transition-enter-active,
+.page-transition-leave-active {
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.page-transition-enter-from,
+.page-transition-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* 爱心粒子效果 */
+.love-particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 100;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .message-bubble {
+    max-width: 90%;
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "path": "d:\\代码库\\Java源码\\chapter10（AI恋爱系统）\\deploy-package",
+  "desc": "这是一个AI恋爱系统项目，包含智能聊天、角色创建、情感分析等功能。前端使用Vue3+TypeScript构建的单页应用。",
+  "id": "ed75294f12854afa8d8fc876596985dc",
+  "data": {
+    "spaceKey": "ed75294f12854afa8d8fc876596985dc",
+    "connections": {
+      "webIDE": "https://ed75294f12854afa8d8fc876596985dc.ap-singapore.cloudstudio.club",
+      "preview": "https://ed75294f12854afa8d8fc876596985dc--{port}.ap-singapore.cloudstudio.club",
+      "api": "https://ed75294f12854afa8d8fc876596985dc--api.ap-singapore.cloudstudio.club",
+      "pty": "https://ed75294f12854afa8d8fc876596985dc--pty.ap-singapore.cloudstudio.club"
+    }
+  },
+  "config": {
+    "api": "https://ed75294f12854afa8d8fc876596985dc--api.ap-singapore.cloudstudio.club",
+    "pty": "https://ed75294f12854afa8d8fc876596985dc--pty.ap-singapore.cloudstudio.club",
+    "region": "ap-shanghai",
+    "spaceKey": "ed75294f12854afa8d8fc876596985dc"
+  }
+}
