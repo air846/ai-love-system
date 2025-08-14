@@ -159,7 +159,14 @@ export const playHeartbeat = (bpm: number = 70, duration: number = 1000): void =
 export const playBreeze = async (duration: number = 2000): Promise<void> => {
   try {
     const context = initAudioContext();
-    
+
+    // 检查AudioWorklet支持
+    if (!context.audioWorklet) {
+      console.warn('AudioWorklet不被支持，使用兼容模式');
+      playBreezeCompatible(duration);
+      return;
+    }
+
     // 使用现代的AudioWorkletNode替代已废弃的ScriptProcessorNode
     // 首先加载白噪音处理器模块
     try {

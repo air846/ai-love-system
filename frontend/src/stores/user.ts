@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed, readonly } from 'vue'
-import type { User, LoginRequest, RegisterRequest } from '@/types/user'
+import type { User, LoginRequest, RegisterRequest, UpdateUserProfileRequest } from '@/types/user'
 import { authApi } from '@/api/auth'
 import { message } from 'ant-design-vue'
 
@@ -78,6 +78,28 @@ export const useUserStore = defineStore('user', () => {
     message.success('已退出登录')
   }
 
+  // 更新用户信息
+  const updateProfile = async (updateData: UpdateUserProfileRequest) => {
+    try {
+      loading.value = true
+      const response = await authApi.updateProfile(updateData)
+
+      if (response.success) {
+        user.value = response.data
+        message.success('个人信息更新成功')
+        return true
+      } else {
+        message.error(response.message || '更新失败')
+        return false
+      }
+    } catch (error: any) {
+      message.error(error.message || '更新失败')
+      return false
+    } finally {
+      loading.value = false
+    }
+  }
+
   // 初始化用户信息
   const initUser = async () => {
     if (token.value && !user.value) {
@@ -94,6 +116,7 @@ export const useUserStore = defineStore('user', () => {
     register,
     logout,
     fetchUserInfo,
+    updateProfile,
     initUser
   }
 })

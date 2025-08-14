@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import router from './router'
 import App from './App.vue'
+import { useUserStore } from './stores/user'
 
 // Ant Design Vue
 import Antd from 'ant-design-vue'
@@ -45,7 +46,8 @@ router.beforeEach((to, from, next) => {
   next()
 })
 
-app.use(createPinia())
+const pinia = createPinia()
+app.use(pinia)
 app.use(router)
 app.use(Antd)
 
@@ -53,3 +55,7 @@ app.use(Antd)
 initTheme()
 
 app.mount('#app')
+
+// 初始化用户信息
+const userStore = useUserStore(pinia)
+userStore.initUser()

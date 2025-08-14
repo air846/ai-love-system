@@ -11,22 +11,23 @@
     "type-check": "vue-tsc --noEmit"
   },
   "dependencies": {
-    "vue": "^3.4.15",
-    "vue-router": "^4.2.5",
-    "pinia": "^2.1.7",
+    "@ant-design/icons-vue": "^7.0.1",
     "ant-design-vue": "^4.1.2",
     "axios": "^1.6.5",
-    "@ant-design/icons-vue": "^7.0.1",
+    "crypto-js": "^4.2.0",
     "dayjs": "^1.11.10",
     "echarts": "^5.4.3",
-    "vue-echarts": "^6.6.1",
+    "echarts-wordcloud": "^2.1.0",
     "lodash-es": "^4.17.21",
-    "crypto-js": "^4.2.0"
+    "pinia": "^2.1.7",
+    "vue": "^3.4.15",
+    "vue-echarts": "^6.6.1",
+    "vue-router": "^4.2.5"
   },
   "devDependencies": {
-    "@types/node": "^20.11.5",
-    "@types/lodash-es": "^4.17.12",
     "@types/crypto-js": "^4.2.2",
+    "@types/lodash-es": "^4.17.12",
+    "@types/node": "^20.11.5",
     "@typescript-eslint/eslint-plugin": "^6.19.1",
     "@typescript-eslint/parser": "^6.19.1",
     "@vitejs/plugin-vue": "^5.0.3",

@@ -47,6 +47,13 @@
           </div>
           <span>记忆信箱</span>
         </a-menu-item>
+
+        <a-menu-item key="user" class="menu-item">
+          <div class="menu-icon user-icon">
+            <UserOutlined />
+          </div>
+          <span>个人中心</span>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     
@@ -70,10 +77,10 @@
         <div class="header-right">
           <a-dropdown>
             <a class="user-dropdown" @click.prevent>
-               <a-avatar :src="userStore.user?.avatar">
-                {{ userStore.user?.username?.charAt(0).toUpperCase() }}
+               <a-avatar :src="userStore.user?.avatarUrl">
+                {{ (userStore.user?.nickname || userStore.user?.username)?.charAt(0).toUpperCase() }}
               </a-avatar>
-              <span class="username">{{ userStore.user?.username }}</span>
+              <span class="username">{{ userStore.user?.nickname || userStore.user?.username }}</span>
               <DownOutlined />
             </a>
             
@@ -142,6 +149,8 @@ const updateSelectedKeys = () => {
     selectedKeys.value = ['emotions']
   } else if (path.includes('/history')) {
     selectedKeys.value = ['history']
+  } else if (path.includes('/user')) {
+    selectedKeys.value = ['user']
   }
 }
 
@@ -150,13 +159,11 @@ const handleMenuClick = ({ key }: { key: string }) => {
 }
 
 const handleProfile = () => {
-  // TODO: 打开个人信息弹窗
-  message.info('个人信息功能开发中')
+  router.push('/dashboard/user/profile')
 }
 
 const handleSettings = () => {
-  // TODO: 打开设置页面
-  message.info('设置功能开发中')
+  router.push('/dashboard/user/preferences')
 }
 
 const handleLogout = () => {

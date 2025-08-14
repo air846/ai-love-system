@@ -3,6 +3,7 @@ package com.ai.love.dto.emotion;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,7 +18,9 @@ public class EmotionStatsResponse {
     private Double positiveRatio;
     private Double negativeRatio;
     private Double neutralRatio;
-    
+    private Double emotionalHealthScore;
+    private List<Map<String, Object>> keywords;
+
     /**
      * 获取主要情感类型
      */
@@ -25,31 +28,18 @@ public class EmotionStatsResponse {
         if (emotionDistribution == null || emotionDistribution.isEmpty()) {
             return "未知";
         }
-        
+
         return emotionDistribution.entrySet().stream()
                 .max(Map.Entry.comparingByValue())
                 .map(Map.Entry::getKey)
                 .orElse("未知");
     }
-    
-    /**
-     * 获取情感健康度评分 (0-100)
-     */
-    public Double getEmotionalHealthScore() {
-        if (totalAnalyses == 0) return 50.0;
-        
-        // 基于正面情感比例和情感多样性计算健康度
-        double positiveScore = positiveRatio * 60;
-        double diversityScore = Math.min(emotionDistribution.size() * 5, 30);
-        double stabilityScore = (1.0 - Math.abs(positiveRatio - 0.6)) * 10;
-        
-        return Math.min(positiveScore + diversityScore + stabilityScore, 100.0);
-    }
-    
+
     /**
      * 获取情感健康度描述
      */
     public String getEmotionalHealthDescription() {
+        if (emotionalHealthScore == null) return "未知";
         double score = getEmotionalHealthScore();
         if (score >= 80) return "优秀";
         if (score >= 60) return "良好";

@@ -115,30 +115,67 @@ public class EmotionAnalysisService {
     @Transactional(readOnly = true)
     public EmotionStatsResponse getEmotionStats() {
         User currentUser = authService.getCurrentUserEntity();
-        
-        // 获取最常见的情感类型
-        List<Object[]> emotionCounts = emotionAnalysisRepository.getMostCommonEmotionsByUserId(currentUser.getId());
+        Long userId = currentUser.getId();
+
+        // 获取情感分布
+        List<Object[]> emotionCounts = emotionAnalysisRepository.getMostCommonEmotionsByUserId(userId);
         Map<String, Long> emotionDistribution = emotionCounts.stream()
                 .collect(Collectors.toMap(
                         data -> ((EmotionAnalysis.EmotionType) data[0]).getDescription(),
                         data -> (Long) data[1]
                 ));
+
+        // 获取情感比例
+        long totalAnalyses = emotionAnalysisRepository.countByUserId(userId);
+        long positiveCount = emotionAnalysisRepository.countPositiveEmotions(userId);
+        long negativeCount = emotionAnalysisRepository.countNegativeEmotions(userId);
+        long neutralCount = totalAnalyses - positiveCount - negativeCount;
+
+        double positiveRatio = totalAnalyses > 0 ? (double) positiveCount / totalAnalyses : 0;
+        double negativeRatio = totalAnalyses > 0 ? (double) negativeCount / totalAnalyses : 0;
+        double neutralRatio = totalAnalyses > 0 ? (double) neutralCount / totalAnalyses : 0;
         
-        // 获取正面/负面情感比例
-        List<EmotionAnalysis> positiveEmotions = emotionAnalysisRepository.findPositiveEmotions(currentUser.getId());
-        List<EmotionAnalysis> negativeEmotions = emotionAnalysisRepository.findNegativeEmotions(currentUser.getId());
-        
-        long totalAnalyses = emotionAnalysisRepository.countByUserId(currentUser.getId());
-        double positiveRatio = totalAnalyses > 0 ? (double) positiveEmotions.size() / totalAnalyses : 0;
-        double negativeRatio = totalAnalyses > 0 ? (double) negativeEmotions.size() / totalAnalyses : 0;
-        
+        // 获取关键词
+        List<String> allKeywords = emotionAnalysisRepository.findAllKeywordsByUserId(userId);
+        List<Map<String, Object>> keywordCloudData = processKeywordsForCloud(allKeywords);
+
+
         return EmotionStatsResponse.builder()
                 .totalAnalyses(totalAnalyses)
                 .emotionDistribution(emotionDistribution)
                 .positiveRatio(positiveRatio)
                 .negativeRatio(negativeRatio)
-                .neutralRatio(1.0 - positiveRatio - negativeRatio)
+                .neutralRatio(neutralRatio)
+                .emotionalHealthScore(calculateHealthScore(positiveRatio, negativeRatio))
+                .keywords(keywordCloudData)
                 .build();
+    }
+
+    private List<Map<String, Object>> processKeywordsForCloud(List<String> allKeywords) {
+        if (allKeywords == null || allKeywords.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return allKeywords.stream()
+                .flatMap(ks -> Arrays.stream(ks.split(",")))
+                .map(String::trim)
+                .filter(k -> !k.isEmpty())
+                .collect(Collectors.groupingBy(k -> k, Collectors.counting()))
+                .entrySet().stream()
+                .map(entry -> {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("name", entry.getKey());
+                    map.put("value", entry.getValue());
+                    return map;
+                })
+                .sorted((a, b) -> Long.compare((long) b.get("value"), (long) a.get("value")))
+                .limit(50) // 限制最多50个关键词
+                .collect(Collectors.toList());
+    }
+
+    private double calculateHealthScore(double positiveRatio, double negativeRatio) {
+        // 一个简单的健康度评分模型
+        return (positiveRatio - negativeRatio * 1.5 + 1) / 2 * 100;
     }
 
     /**

@@ -63,7 +63,7 @@ public class AuthController {
      */
     @PutMapping("/profile")
     @Operation(summary = "更新用户信息", description = "更新当前用户的个人信息")
-    public ApiResponse<UserProfileResponse> updateProfile(@RequestBody UserProfileResponse request) {
+    public ApiResponse<UserProfileResponse> updateProfile(@Valid @RequestBody UpdateUserProfileRequest request) {
         UserProfileResponse profile = authService.updateProfile(request);
         return ApiResponse.success("信息更新成功", profile);
     }
@@ -108,5 +108,35 @@ public class AuthController {
         // 这里可以记录登出日志或进行其他业务处理
         log.info("用户登出: {}", authService.getCurrentUserEntity().getUsername());
         return ApiResponse.success("登出成功");
+    }
+
+    /**
+     * 获取用户偏好设置
+     */
+    @GetMapping("/preferences")
+    @Operation(summary = "获取用户偏好设置", description = "获取当前用户的偏好设置")
+    public ApiResponse<UserPreferencesDto> getUserPreferences() {
+        UserPreferencesDto preferences = authService.getUserPreferences();
+        return ApiResponse.success(preferences);
+    }
+
+    /**
+     * 更新用户偏好设置
+     */
+    @PutMapping("/preferences")
+    @Operation(summary = "更新用户偏好设置", description = "更新当前用户的偏好设置")
+    public ApiResponse<UserPreferencesDto> updateUserPreferences(@Valid @RequestBody UserPreferencesDto preferences) {
+        UserPreferencesDto updatedPreferences = authService.updateUserPreferences(preferences);
+        return ApiResponse.success("偏好设置更新成功", updatedPreferences);
+    }
+
+    /**
+     * 重置用户偏好设置
+     */
+    @PostMapping("/preferences/reset")
+    @Operation(summary = "重置用户偏好设置", description = "重置当前用户的偏好设置为默认值")
+    public ApiResponse<UserPreferencesDto> resetUserPreferences() {
+        UserPreferencesDto defaultPreferences = authService.resetUserPreferences();
+        return ApiResponse.success("偏好设置重置成功", defaultPreferences);
     }
 }

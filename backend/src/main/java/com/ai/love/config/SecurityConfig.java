@@ -60,7 +60,10 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // 公开端点
                 .requestMatchers(
-                    "/auth/**",
+                    "/auth/login",
+                    "/auth/register",
+                    "/health/**",
+                    "/uploads/**",
                     "/swagger-ui/**",
                     "/swagger-ui.html",
                     "/v3/api-docs/**",
@@ -69,7 +72,20 @@ public class SecurityConfig {
                     "/h2-console/**",
                     "/actuator/**"
                 ).permitAll()
-                
+
+                // 需要认证的端点
+                .requestMatchers(
+                    "/auth/profile",
+                    "/auth/preferences/**",
+                    "/auth/password",
+                    "/auth/logout",
+                    "/upload/**",
+                    "/characters/**",
+                    "/conversations/**",
+                    "/chat/**",
+                    "/emotions/**"
+                ).authenticated()
+
                 // 其他请求需要认证
                 .anyRequest().authenticated()
             )

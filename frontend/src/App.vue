@@ -59,9 +59,9 @@ watch(() => route.path, (newPath, oldPath) => {
         particlesRef.value.createHeartBurst(centerX, centerY, 50)
       }
       
-      // 播放微风声效果
+      // 播放微风声效果（可选，如果不需要可以注释掉）
       try {
-        soundEffects.playBreeze(1500)
+        // soundEffects.playBreeze(1500) // 暂时禁用音频以减少控制台警告
       } catch (error) {
         console.error('播放声音效果失败:', error)
       }

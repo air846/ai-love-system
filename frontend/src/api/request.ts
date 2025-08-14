@@ -3,14 +3,30 @@ import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosReq
 import { message } from 'ant-design-vue'
 import router from '@/router'
 
+// 获取API基础URL
+const getBaseURL = () => {
+  // 在开发环境中使用代理
+  if (import.meta.env.DEV) {
+    return '/api'
+  }
+  // 在生产环境中使用环境变量或默认值
+  return import.meta.env.VITE_API_BASE_URL || '/api'
+}
+
 // 创建axios实例
 const request: AxiosInstance = axios.create({
-  baseURL: '/api',
+  baseURL: getBaseURL(),
   timeout: 30000, // 增加超时时间到30秒，因为AI响应可能需要更长时间
   headers: {
     'Content-Type': 'application/json'
   }
 })
+
+// 在开发环境中输出调试信息
+if (import.meta.env.DEV) {
+  console.log('API Base URL:', getBaseURL())
+  console.log('Environment:', import.meta.env.MODE)
+}
 
 // 请求拦截器
 request.interceptors.request.use(

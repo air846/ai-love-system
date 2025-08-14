@@ -50,14 +50,32 @@ public interface EmotionAnalysisRepository extends JpaRepository<EmotionAnalysis
     /**
      * 查找正面情感分析
      */
-    @Query("SELECT e FROM EmotionAnalysis e WHERE e.conversation.id = :conversationId AND e.valence > 0.1")
-    List<EmotionAnalysis> findPositiveEmotions(@Param("conversationId") Long conversationId);
+    @Query("SELECT e FROM EmotionAnalysis e WHERE e.conversation.user.id = :userId AND e.valence > 0.1")
+    List<EmotionAnalysis> findPositiveEmotions(@Param("userId") Long userId);
 
     /**
      * 查找负面情感分析
      */
-    @Query("SELECT e FROM EmotionAnalysis e WHERE e.conversation.id = :conversationId AND e.valence < -0.1")
-    List<EmotionAnalysis> findNegativeEmotions(@Param("conversationId") Long conversationId);
+    @Query("SELECT e FROM EmotionAnalysis e WHERE e.conversation.user.id = :userId AND e.valence < -0.1")
+    List<EmotionAnalysis> findNegativeEmotions(@Param("userId") Long userId);
+
+    /**
+     * 统计正面情感数量
+     */
+    @Query("SELECT COUNT(e) FROM EmotionAnalysis e WHERE e.conversation.user.id = :userId AND e.valence > 0.1")
+    long countPositiveEmotions(@Param("userId") Long userId);
+
+    /**
+     * 统计负面情感数量
+     */
+    @Query("SELECT COUNT(e) FROM EmotionAnalysis e WHERE e.conversation.user.id = :userId AND e.valence < -0.1")
+    long countNegativeEmotions(@Param("userId") Long userId);
+
+    /**
+     * 查找用户的所有关键词
+     */
+    @Query("SELECT e.keywords FROM EmotionAnalysis e WHERE e.conversation.user.id = :userId AND e.keywords IS NOT NULL AND e.keywords != ''")
+    List<String> findAllKeywordsByUserId(@Param("userId") Long userId);
 
     /**
      * 查找高强度情感分析

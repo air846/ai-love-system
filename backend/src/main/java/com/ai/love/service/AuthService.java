@@ -3,7 +3,11 @@ package com.ai.love.service;
 import com.ai.love.dto.auth.LoginRequest;
 import com.ai.love.dto.auth.LoginResponse;
 import com.ai.love.dto.auth.RegisterRequest;
+import com.ai.love.dto.auth.UpdateUserProfileRequest;
+import com.ai.love.dto.auth.UserPreferencesDto;
 import com.ai.love.dto.auth.UserProfileResponse;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ai.love.entity.User;
 import com.ai.love.exception.BusinessException;
 import com.ai.love.repository.UserRepository;
@@ -32,6 +36,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
+    private final ObjectMapper objectMapper;
 
     /**
      * 用户注册
@@ -112,7 +117,7 @@ public class AuthService {
     @Transactional(readOnly = true)
     public UserProfileResponse getCurrentUser() {
         User user = getCurrentUserEntity();
-        
+
         return UserProfileResponse.builder()
                 .id(user.getId())
                 .username(user.getUsername())
@@ -121,8 +126,16 @@ public class AuthService {
                 .avatarUrl(user.getAvatarUrl())
                 .status(user.getStatus().name())
                 .loginCount(user.getLoginCount())
+                .emailVerified(user.getEmailVerified())
+                .phone(user.getPhone())
+                .birthDate(user.getBirthDate())
+                .gender(user.getGender())
+                .genderDescription(user.getGender() != null ? user.getGender().getDescription() : null)
+                .bio(user.getBio())
+                .lastLoginIp(user.getLastLoginIp())
                 .lastLoginAt(user.getLastLoginAt())
                 .createdAt(user.getCreatedAt())
+                .updatedAt(user.getUpdatedAt())
                 .build();
     }
 
@@ -130,19 +143,63 @@ public class AuthService {
      * 更新用户信息
      */
     @Transactional
-    public UserProfileResponse updateProfile(UserProfileResponse request) {
+    public UserProfileResponse updateProfile(UpdateUserProfileRequest request) {
         User user = getCurrentUserEntity();
-        
+
+        // 检查邮箱是否已被其他用户使用
+        if (request.getEmail() != null && !request.getEmail().equals(user.getEmail())) {
+            if (userRepository.existsByEmail(request.getEmail())) {
+                throw new BusinessException("邮箱已被其他用户使用");
+            }
+            user.setEmail(request.getEmail());
+            user.setEmailVerified(false); // 邮箱变更后需要重新验证
+        }
+
         if (request.getNickname() != null) {
             user.setNickname(request.getNickname());
         }
         if (request.getAvatarUrl() != null) {
             user.setAvatarUrl(request.getAvatarUrl());
         }
-        
+        if (request.getPhone() != null) {
+            user.setPhone(request.getPhone());
+        }
+        if (request.getBirthDate() != null) {
+            user.setBirthDate(request.getBirthDate());
+        }
+        if (request.getGender() != null) {
+            user.setGender(request.getGender());
+        }
+        if (request.getBio() != null) {
+            user.setBio(request.getBio());
+        }
+        if (request.getPreferences() != null) {
+            user.setPreferences(request.getPreferences());
+        }
+
         userRepository.save(user);
         log.info("用户信息更新成功: {}", user.getUsername());
-        
+
+        return getCurrentUser();
+    }
+
+    /**
+     * 更新用户信息（兼容旧版本）
+     */
+    @Transactional
+    public UserProfileResponse updateProfile(UserProfileResponse request) {
+        User user = getCurrentUserEntity();
+
+        if (request.getNickname() != null) {
+            user.setNickname(request.getNickname());
+        }
+        if (request.getAvatarUrl() != null) {
+            user.setAvatarUrl(request.getAvatarUrl());
+        }
+
+        userRepository.save(user);
+        log.info("用户信息更新成功: {}", user.getUsername());
+
         return getCurrentUser();
     }
 
@@ -195,5 +252,66 @@ public class AuthService {
      */
     public Long getCurrentUserId() {
         return getCurrentUserEntity().getId();
+    }
+
+    /**
+     * 获取用户偏好设置
+     */
+    @Transactional(readOnly = true)
+    public UserPreferencesDto getUserPreferences() {
+        User user = getCurrentUserEntity();
+        String preferencesJson = user.getPreferences();
+
+        if (preferencesJson == null || preferencesJson.trim().isEmpty()) {
+            return new UserPreferencesDto(); // 返回默认偏好设置
+        }
+
+        try {
+            return objectMapper.readValue(preferencesJson, UserPreferencesDto.class);
+        } catch (JsonProcessingException e) {
+            log.warn("解析用户偏好设置失败: userId={}, error={}", user.getId(), e.getMessage());
+            return new UserPreferencesDto(); // 返回默认偏好设置
+        }
+    }
+
+    /**
+     * 更新用户偏好设置
+     */
+    @Transactional
+    public UserPreferencesDto updateUserPreferences(UserPreferencesDto preferences) {
+        User user = getCurrentUserEntity();
+
+        try {
+            String preferencesJson = objectMapper.writeValueAsString(preferences);
+            user.setPreferences(preferencesJson);
+            userRepository.save(user);
+
+            log.info("用户偏好设置更新成功: userId={}", user.getId());
+            return preferences;
+        } catch (JsonProcessingException e) {
+            log.error("保存用户偏好设置失败: userId={}, error={}", user.getId(), e.getMessage());
+            throw new BusinessException("偏好设置保存失败");
+        }
+    }
+
+    /**
+     * 重置用户偏好设置
+     */
+    @Transactional
+    public UserPreferencesDto resetUserPreferences() {
+        User user = getCurrentUserEntity();
+        UserPreferencesDto defaultPreferences = new UserPreferencesDto();
+
+        try {
+            String preferencesJson = objectMapper.writeValueAsString(defaultPreferences);
+            user.setPreferences(preferencesJson);
+            userRepository.save(user);
+
+            log.info("用户偏好设置重置成功: userId={}", user.getId());
+            return defaultPreferences;
+        } catch (JsonProcessingException e) {
+            log.error("重置用户偏好设置失败: userId={}, error={}", user.getId(), e.getMessage());
+            throw new BusinessException("偏好设置重置失败");
+        }
     }
 }

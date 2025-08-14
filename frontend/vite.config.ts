@@ -39,16 +39,21 @@ export default defineConfig({
     host: '0.0.0.0',
     proxy: {
       '/api': {
-        target: 'http://localhost:8080',
+        target: process.env.VITE_API_BASE_URL || 'http://localhost:8080',
         changeOrigin: true,
         secure: false,
+        rewrite: (path) => path,
         // 添加错误处理和日志
         configure: (proxy, options) => {
           proxy.on('error', (err, req, res) => {
             console.log('代理错误:', err)
+            console.log('目标地址:', options.target)
           })
           proxy.on('proxyReq', (proxyReq, req, res) => {
-            console.log('代理请求:', req.method, req.url)
+            console.log('代理请求:', req.method, req.url, '-> ', options.target + req.url)
+          })
+          proxy.on('proxyRes', (proxyRes, req, res) => {
+            console.log('代理响应:', proxyRes.statusCode, req.url)
           })
         }
       }

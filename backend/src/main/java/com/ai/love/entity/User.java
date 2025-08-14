@@ -7,6 +7,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -46,10 +48,32 @@ public class User extends BaseEntity {
     private UserStatus status = UserStatus.ACTIVE;
 
     @Column(name = "last_login_at")
-    private java.time.LocalDateTime lastLoginAt;
+    private LocalDateTime lastLoginAt;
+
+    @Column(name = "last_login_ip", length = 45)
+    private String lastLoginIp;
 
     @Column(name = "login_count", nullable = false)
     private Integer loginCount = 0;
+
+    @Column(name = "email_verified", nullable = false)
+    private Boolean emailVerified = false;
+
+    @Column(name = "phone", length = 20)
+    private String phone;
+
+    @Column(name = "birth_date")
+    private LocalDate birthDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "gender")
+    private Gender gender;
+
+    @Column(name = "bio", columnDefinition = "TEXT")
+    private String bio;
+
+    @Column(name = "preferences", columnDefinition = "JSONB")
+    private String preferences;
 
     // 关联关系
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -79,10 +103,38 @@ public class User extends BaseEntity {
     }
 
     /**
+     * 用户性别枚举
+     */
+    public enum Gender {
+        MALE("男"),
+        FEMALE("女"),
+        OTHER("其他");
+
+        private final String description;
+
+        Gender(String description) {
+            this.description = description;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+    }
+
+    /**
      * 更新登录信息
      */
     public void updateLoginInfo() {
-        this.lastLoginAt = java.time.LocalDateTime.now();
+        this.lastLoginAt = LocalDateTime.now();
+        this.loginCount = this.loginCount + 1;
+    }
+
+    /**
+     * 更新登录信息（包含IP地址）
+     */
+    public void updateLoginInfo(String ipAddress) {
+        this.lastLoginAt = LocalDateTime.now();
+        this.lastLoginIp = ipAddress;
         this.loginCount = this.loginCount + 1;
     }
 }

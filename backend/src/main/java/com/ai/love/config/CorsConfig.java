@@ -28,7 +28,11 @@ public class CorsConfig {
             "http://127.0.0.1:3000",
             "http://127.0.0.1:3001",
             "http://127.0.0.1:3002",
-            "http://127.0.0.1:5173"
+            "http://127.0.0.1:5173",
+            "http://192.168.0.102:3000",
+            "http://192.168.0.102:3001",
+            "http://192.168.0.102:3002",
+            "http://192.168.0.102:5173"
         );
         configuration.setAllowedOriginPatterns(allowedOrigins);
 
